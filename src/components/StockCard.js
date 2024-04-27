@@ -2,13 +2,15 @@
 import React from 'react';
 
 // Create a StockCard component that accepts symbol, name, and price as props
-const StockCard = ({ symbol, name, price }) => {
+const StockCard = ({ symbol, name, price, onCardClick }) => {
   return (
-    <div style={cardStyle}> {/* Apply card styling */}
+    
+    <div style={cardStyle} onClick={onCardClick} > {/* Apply card styling */}
       <p>{name}</p> {/* Company name */}
       <h3>{symbol}</h3> {/* Stock symbol */}
       <p>Price: ${price}</p> {/* Stock price */}
     </div>
+    
   );
 };
 

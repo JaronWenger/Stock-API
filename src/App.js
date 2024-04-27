@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
+import './index.css';
 
 
 import StockCard from './components/StockCard'; 
@@ -105,6 +106,10 @@ function App() {
     }
   };
 
+
+  const handleRemoveTicker = (ticker) => {
+    setStockTickers((prevTickers) => prevTickers.filter((t) => t !== ticker)); // Filter out the removed ticker
+  };
   
 
   return (
@@ -119,7 +124,7 @@ function App() {
           alignItems: 'center',
 
         }}>
-          <h1 style={{ fontFamily: 'Josefin Sans', fontSize: '7em', marginBottom: '0' }}>
+          <h1 className="app-title" style={{ fontFamily: 'Josefin Sans', marginBottom: '0' }}>
             STOCK LOOKUP
           </h1>
         </div>
@@ -169,6 +174,7 @@ function App() {
         symbol={ticker}
         name={stockData[ticker]?.name || 'Not available'}
         price={stockData[ticker]?.price || 'Not available'}
+        onCardClick={() => handleRemoveTicker(ticker)}
       />
     ))
 )}

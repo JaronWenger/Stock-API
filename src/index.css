@@ -16,3 +16,13 @@ code {
 body {
   font-family: 'Josefin Sans', sans-serif; /* Set default font for the entire app */
 }
+
+.app-title { /* Base style */
+  font-size: 6rem;
+}
+
+@media (max-width: 780px) {
+  .app-title {
+    font-size: 3rem !important; 
+  }
+}
