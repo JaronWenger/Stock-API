@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+body {
+  font-family: 'Josefin Sans', sans-serif; /* Set default font for the entire app */
+}

@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import CircularProgress from '@mui/material/CircularProgress';
 
+import StockCard from './components/StockCard'; 
+import { getStockName } from './components/lookupFunction'; 
 
 const darkTheme = createTheme({
   palette: {
@@ -12,38 +16,69 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [teslaPrice, setTeslaPrice] = useState(null);
-  const [applePrice, setApplePrice] = useState(null);
-  const [chipotlePrice, setChipotlePrice] = useState(null);
+  const [stockTickers, setStockTickers] = useState(['MSFT', 'AAPL', 'NVDA', 'AMZN', 'META']); // Dynamic list
+  const [stockData, setStockData] = useState({});
+  const [inputValue, setInputValue] = useState(''); // Manage text field value
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
+  const fetchStockPrice = async (symbol) => {
+    try {
+      const response = await axios.get(
+        `https://data.alpaca.markets/v2/stocks/${symbol}/quotes/latest`,
+        {
+          headers: {
+            'APCA-API-KEY-ID': process.env.REACT_APP_ALPACA_KEY_ID,
+            'APCA-API-SECRET-KEY': process.env.REACT_APP_ALPACA_SECRET_KEY,
+          },
+        }
+      );
+      return response.data.quote.ap; // Ask price
+    } catch (error) {
+      console.error(`Error fetching stock price for ${symbol}:`, error);
+      return 'Error'; // Error handling
+    }
+  };
+
+
+
+  useEffect(() => {
+    const fetchAllStockPrices = async () => {
+      const stockDataPromises = stockTickers.map(async (ticker) => {
+        const companyName = getStockName(ticker);
+        const stockPrice = await fetchStockPrice(ticker);
+        return { ticker, name: companyName, price: stockPrice };
+      });
+
+      const fetchedStockData = await Promise.all(stockDataPromises);
+
+      const newStockData = fetchedStockData.reduce((acc, data) => {
+        acc[data.ticker] = data;
+        return acc;
+      }, {});
+
+      setStockData(newStockData);
+      setIsLoading(false);
+    };
+
+    fetchAllStockPrices();
+  }, [stockTickers]); // Updated when stockTickers changes
+
 
   
 
-  useEffect(() => {
 
-    // Function to fetch Tesla's ask price
-    const fetchStockPrice = async (symbol, asset, setPrice) => {
-      try {
-        const response = await axios.get(
-          `https://data.alpaca.markets/v2/${asset}/${symbol}/quotes/latest`,
-          {
-            headers: {
-              'APCA-API-KEY-ID': process.env.REACT_APP_ALPACA_KEY_ID, // Environment variable for API Key ID
-              'APCA-API-SECRET-KEY': process.env.REACT_APP_ALPACA_SECRET_KEY, // Environment variable for Secret Key
-            },
-          }
-        );
-        console.log(response)
-        const askPrice = response.data.quote.ap; // Get the ask price from the quote
-        setPrice(askPrice ? askPrice.toFixed(2) : 'Not available');
-      } catch (error) {
-        console.error(`Error fetching ${symbol} ask price:`, error);
-      }
-    };
 
-    fetchStockPrice('TSLA', "stocks", setTeslaPrice);
-    fetchStockPrice('AAPL', "stocks", setApplePrice);
-    fetchStockPrice('CMG', "stocks", setChipotlePrice);
-  }, []); // Runs only once when component is mounted
+  const handleAddStock = () => {
+    if (inputValue && !stockTickers.includes(inputValue.toUpperCase())) { // Ensure it's not a duplicate
+      setStockTickers((prev) => [...prev, inputValue.toUpperCase()]); // Add the new symbol
+      setInputValue(''); // Reset input
+    }
+  };
+
+
+  
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -53,32 +88,36 @@ function App() {
         className="App"
         style={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          height: '100vh',
+          padding: '20px',
         }}
       >
-        <Button variant="contained">Hello, World!</Button>
+        <TextField
+          id="stock-symbol-input"
+          label="Enter Stock Symbol or Name"
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)} // Update input value
+        />
+        <Button variant="contained" onClick={handleAddStock}>Add Stock</Button>
 
-        {/* Display Tesla's ask price */}
-        {teslaPrice ? (
-        <p>Current ask price of Tesla: ${teslaPrice}</p> // Display ask price
-      ) : (
-        <p>Loading Tesla's ask price...</p>
-      )}
-      {applePrice ? (
-        <p>Current ask price of Apple: ${applePrice}</p> // Display ask price
-      ) : (
-        <p>Loading Apple's ask price...</p>
-      )}
-      {chipotlePrice ? (
-        <p>Current ask price of Chipotle: ${chipotlePrice}</p> // Display ask price
-      ) : (
-        <p>Loading Chipotle's ask price...</p>
-      )}
-
-
-
+        {isLoading ? (
+  <CircularProgress />
+) : (
+  stockTickers
+    .slice() // Create a shallow copy to avoid mutating the original array
+    .reverse() // Reverse the array order
+    .map((ticker) => (
+      <StockCard
+        key={ticker}
+        symbol={ticker}
+        name={stockData[ticker]?.name || 'Not available'}
+        price={stockData[ticker]?.price || 'Not available'}
+      />
+    ))
+)}
       </div>
     </ThemeProvider>
   );

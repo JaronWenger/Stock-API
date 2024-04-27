@@ -6,12 +6,27 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import StockCard from './components/StockCard'; 
-import { getStockName } from './components/lookupFunction'; 
 
-const darkTheme = createTheme({
+import StockCard from './components/StockCard'; 
+import { getStockName, getStockSymbol } from './components/lookupFunction'; 
+import { styled } from '@mui/material/styles';
+
+const neutralTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'dark', // Start with a dark theme base
+    background: {
+      default: 'darkslategray', // Custom "neutral" background color
+      paper: '#3b3b3b', // Slightly lighter for Paper-based components
+    },
+    text: {
+      primary: '#ffffff', // Maintain light text for contrast
+    },
+  },
+});
+
+const CustomTextField = styled(TextField)({
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderWidth: '4px', // Make the border thicker
   },
 });
 
@@ -20,6 +35,8 @@ function App() {
   const [stockData, setStockData] = useState({});
   const [inputValue, setInputValue] = useState(''); // Manage text field value
   const [isLoading, setIsLoading] = useState(true);
+
+
 
   const fetchStockPrice = async (symbol) => {
     try {
@@ -38,6 +55,8 @@ function App() {
       return 'Error'; // Error handling
     }
   };
+
+
 
   useEffect(() => {
     const fetchAllStockPrices = async () => {
@@ -61,18 +80,70 @@ function App() {
     fetchAllStockPrices();
   }, [stockTickers]); // Updated when stockTickers changes
 
+
+
+
+
+
   const handleAddStock = () => {
-    if (inputValue && !stockTickers.includes(inputValue.toUpperCase())) { // Ensure it's not a duplicate
-      setStockTickers((prev) => [...prev, inputValue.toUpperCase()]); // Add the new symbol
-      setInputValue(''); // Reset input
+    if (inputValue) {
+      const stockSymbol = getStockSymbol(inputValue);
+  
+      if (stockSymbol !== 'Unknown Symbol' && !stockTickers.includes(stockSymbol)) {
+        setStockTickers((prev) => [...prev, stockSymbol]); // Add the valid symbol
+        setInputValue(''); // Reset input
+      } else {
+        console.warn("Invalid stock symbol or it's already in the list.");
+      }
+    }
+  };
+  
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') { // Check if the key pressed is 'Enter'
+      handleAddStock(); // Call the function to add the stock
     }
   };
 
   
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={neutralTheme}>
       <CssBaseline />
+      <div
+        className="App"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+
+        }}>
+          <h1 style={{ fontFamily: 'Josefin Sans', fontSize: '7em', marginBottom: '0' }}>
+            STOCK LOOKUP
+          </h1>
+        </div>
+
+        <div
+        className="App"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '20px',
+        }}>
+        <CustomTextField
+          id="stock-symbol-input"
+          label="Enter Stock Symbol or Name"
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)} // Update input value
+          onKeyDown={handleKeyDown}
+        />
+        <Button variant="contained" onClick={handleAddStock} style={{ height: '57px', padding: '10px 20px', backgroundColor: 'lightGrey'}}>Add Stock</Button>
+        </div>
+
 
       <div
         className="App"
@@ -84,14 +155,7 @@ function App() {
           padding: '20px',
         }}
       >
-        <TextField
-          id="stock-symbol-input"
-          label="Enter Stock Symbol or Name"
-          variant="outlined"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)} // Update input value
-        />
-        <Button variant="contained" onClick={handleAddStock}>Add Stock</Button>
+
 
         {isLoading ? (
   <CircularProgress />

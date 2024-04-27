@@ -4,10 +4,10 @@ import React from 'react';
 // Create a StockCard component that accepts symbol, name, and price as props
 const StockCard = ({ symbol, name, price }) => {
   return (
-    <div style={cardStyle}>
-      <p>{name}</p> {/* Display the stock name */}
-        <h3>{symbol}</h3> {/* Display the stock symbol */}
-      <p>Price: ${price}</p> {/* Display the stock price */}
+    <div style={cardStyle}> {/* Apply card styling */}
+      <p>{name}</p> {/* Company name */}
+      <h3>{symbol}</h3> {/* Stock symbol */}
+      <p>Price: ${price}</p> {/* Stock price */}
     </div>
   );
 };
@@ -25,6 +25,7 @@ const cardStyle = {
     alignItems: 'center', // Vertical alignment for child elements
     justifyContent: 'space-between', // Space between elements
     textAlign: 'center', // Text alignment
+    gap: '30px',
   };
   
 
