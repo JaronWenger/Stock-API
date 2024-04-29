@@ -13,16 +13,19 @@ code {
 }
 
 
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,500&display=swap');
+
 body {
-  font-family: 'Josefin Sans', sans-serif; /* Set default font for the entire app */
+  font-family: 'Josefin Sans', sans-serif; 
 }
 
-.app-title { /* Base style */
+.app-title {
   font-size: 6rem;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 950px) {
   .app-title {
-    font-size: 3rem !important; 
+    font-size: 2rem !important; 
+    margin-top: 50px;
   }
 }

@@ -1,4 +1,4 @@
-// components/stockData.js
+
 const stockData = {
   MSFT: 'Microsoft Corp',
   AAPL: 'Apple Inc.',
@@ -504,9 +504,7 @@ const stockData = {
   MHK: 'Mohawk Industries, Inc.',
   FOX: 'Fox Corporation Class B',
   NWS: 'News Corporation Class B',
-    // Add more stocks here...
-    // You can continue adding stock symbols and their corresponding names
   };
   
-  export default stockData; // Export the stock data
+  export default stockData;
   

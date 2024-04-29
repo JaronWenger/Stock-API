@@ -29,6 +29,21 @@ const CustomTextField = styled(TextField)({
   '& .MuiOutlinedInput-notchedOutline': {
     borderWidth: '4px', // Make the border thicker
   },
+  '&:hover .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'white', // Change hover border color
+  },
+  '& .MuiOutlinedInput-input': {
+    color: 'white', // Optional: change text color
+  },
+  '& .MuiInputLabel-root': {
+    color: 'lighGray', // Optional: change label color
+  },
+  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'white', // Change border color to white when focused
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: 'white', // Label color when focused
+  },
 });
 
 function App() {

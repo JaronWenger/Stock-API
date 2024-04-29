@@ -16,11 +16,11 @@ const StockCard = ({ symbol, name, price, onCardClick }) => {
 
 // Define simple styling for the card
 const cardStyle = {
-    border: '1px solid #ccc', // Light border
-    padding: '10px', // Inner padding
-    borderRadius: '5px', // Rounded corners
+    border: '5px solid darkslategray', // Light border
+    padding: '15px', // Inner padding
+    borderRadius: '15px', // Rounded corners
     backgroundColor: 'black', // Light background color (fixed incorrect hex)
-    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Light shadow
+
     maxWidth: '400px', // Increased width to accommodate horizontal layout
     minHeight: '50px', // Minimum height for consistent appearance
     display: 'flex', // Flexbox layout to align items horizontally
