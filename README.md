@@ -6,4 +6,4 @@ This is a React App utilizing Material Ui for design. Below is a link to this pr
 
 https://jaronwenger.github.io/Stock-API/
 
-<img width="1480" alt="Screenshot 2024-04-30 at 3 58 12 PM" src="https://github.com/JaronWenger/Stock-API/assets/147181586/29e49f5c-8295-45d9-9d56-527d635fe551">
+<img width="1480" alt="Screenshot 2024-04-30 at 4 20 23 PM" src="https://github.com/JaronWenger/Stock-API/assets/147181586/ac2b6599-8cbc-4031-a7c9-2636fec3c60c">
