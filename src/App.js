@@ -50,8 +50,6 @@ function App() {
   const [stockData, setStockData] = useState({});
   const [inputValue, setInputValue] = useState(''); // Manage text field value
   const [isLoading, setIsLoading] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-  const [itemToRemove, setItemToRemove] = useState(null);
 
   const fetchStockPrice = async (symbol) => {
     try {
@@ -143,32 +141,12 @@ function App() {
   };
 
   const onDragEnd = (result) => {
-    setIsDragging(false);
-    
-    if (!result.destination || result.destination.droppableId === 'trash') {
-      setItemToRemove(result.draggableId);
-      return;
-    }
+    if (!result.destination) return;
 
-    // Handle reordering if not dropped on trash
     const items = Array.from(stockTickers);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
     setStockTickers(items);
-  };
-
-  // Use an effect to handle the removal after the drag is complete
-  useEffect(() => {
-    if (itemToRemove) {
-      setStockTickers(prevTickers => 
-        prevTickers.filter(ticker => ticker !== itemToRemove)
-      );
-      setItemToRemove(null);
-    }
-  }, [itemToRemove]);
-
-  const onDragStart = () => {
-    setIsDragging(true);
   };
 
   return (
@@ -220,9 +198,9 @@ function App() {
         {isLoading ? (
           <CircularProgress />
         ) : (
-          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+          <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="stocks">
-              {(provided) => (
+              {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
                   ref={provided.innerRef}
@@ -252,69 +230,14 @@ function App() {
                             name={stockData[ticker]?.name || 'Not available'}
                             price={stockData[ticker]?.price || 'Not available'}
                             percentChange={stockData[ticker]?.percentChange || 0}
+                            onDelete={(symbol) => {
+                              setStockTickers(prev => prev.filter(t => t !== symbol));
+                            }}
                           />
                         </div>
                       )}
                     </Draggable>
                   ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-
-            <Droppable droppableId="trash">
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  style={{
-                    position: 'fixed',
-                    bottom: 20,
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: '50%',
-                    backgroundColor: snapshot.isDraggingOver ? 'rgba(255, 0, 0, 0.2)' : 
-                      'rgba(0, 0, 0, 0.3)',
-                    display: isDragging ? 'flex' : 'none',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    transition: 'all 0.2s ease',
-                    opacity: snapshot.isDraggingOver ? 1 : 0.7,
-                    transform: `scale(${snapshot.isDraggingOver ? 1.2 : 1})`,
-                    cursor: 'pointer',
-                    zIndex: 1000,
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 0, 0, 0.3)'
-                    }
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = snapshot.isDraggingOver ? 
-                      'rgba(255, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.3)';
-                  }}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke={snapshot.isDraggingOver ? '#ff0000' : '#ffffff'}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ 
-                      width: 30,
-                      height: 30
-                    }}
-                  >
-                    <path d="M3 6h18" />
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                    <line x1="10" y1="11" x2="10" y2="17" />
-                    <line x1="14" y1="11" x2="14" y2="17" />
-                  </svg>
                   {provided.placeholder}
                 </div>
               )}

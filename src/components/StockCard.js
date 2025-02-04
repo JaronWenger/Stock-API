@@ -2,24 +2,35 @@
 import React from 'react';
 
 // Create a StockCard component that accepts symbol, name, price, and percentChange as props
-const StockCard = ({ symbol, name, price, percentChange = 0, onCardClick }) => {
+const StockCard = ({ symbol, name, price, percentChange = 0, onCardClick, onDelete }) => {
   const isPositive = percentChange >= 0;
   
   return (
-    <div style={cardStyle} onClick={onCardClick}>
-      <div style={leftContentStyle}>
-        <h3 style={symbolStyle}>{symbol}</h3>
-        <p style={nameStyle}>{name}</p>
+    <div className="stock-card" style={{ position: 'relative' }}>
+      <div 
+        className="delete-button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(symbol);
+        }}
+      >
+        ×
       </div>
-      <div style={rightContentStyle}>
-        <div style={priceStyle}>
-          ${typeof price === 'number' ? price.toFixed(2) : price}
+      <div style={cardStyle} onClick={onCardClick}>
+        <div style={leftContentStyle}>
+          <h3 style={symbolStyle}>{symbol}</h3>
+          <p style={nameStyle}>{name}</p>
         </div>
-        <div style={{
-          ...percentChangeStyle,
-          color: isPositive ? '#00C805' : '#FF5000'
-        }}>
-          {isPositive ? '+' : ''}{percentChange.toFixed(2)}%
+        <div style={rightContentStyle}>
+          <div style={priceStyle}>
+            ${typeof price === 'number' ? price.toFixed(2) : price}
+          </div>
+          <div style={{
+            ...percentChangeStyle,
+            color: isPositive ? '#00C805' : '#FF5000'
+          }}>
+            {isPositive ? '+' : ''}{percentChange.toFixed(2)}%
+          </div>
         </div>
       </div>
     </div>
