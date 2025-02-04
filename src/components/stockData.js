@@ -1,4 +1,3 @@
-
 const stockData = {
   MSFT: 'Microsoft Corp',
   AAPL: 'Apple Inc.',
@@ -504,7 +503,16 @@ const stockData = {
   MHK: 'Mohawk Industries, Inc.',
   FOX: 'Fox Corporation Class B',
   NWS: 'News Corporation Class B',
-  };
-  
-  export default stockData;
+  MSTR: 'MicroStrategy Incorporated',
+  COIN: 'Coinbase Global Inc.',
+  PLTR: 'Palantir Technologies Inc.',
+  AI: 'C3.ai Inc.',
+  TSM: 'Taiwan Semiconductor',
+  BABA: 'Alibaba Group Holding Ltd.',
+  SQ: 'Block Inc.',
+  LYFT: 'Lyft Inc.',
+  SNOW: 'Snowflake Inc.'
+};
+
+export default stockData;
   

@@ -1,3 +1,11 @@
+/* Make sure the dark background covers everything */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: #1a1a1a;  /* Solid color for base */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +13,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 50%, #1a1a1a 100%);
+  min-height: 100vh;
+  color: white;
+}
+
+/* Make sure #root also covers full height */
+#root {
+  min-height: 100vh;
+  background: transparent;
 }
 
 code {
@@ -12,20 +29,99 @@ code {
     monospace;
 }
 
-
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,500&display=swap');
 
 body {
   font-family: 'Josefin Sans', sans-serif; 
 }
 
-.app-title {
-  font-size: 6rem;
+.App {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
+.app-title {
+  font-size: min(8vw, 3.5rem);  /* Increased from 5vw to 8vw for better mobile size */
+  font-weight: 600;
+  text-align: center;
+  margin: 40px 0;
+  background: linear-gradient(90deg, #3498db 0%, #2980b9 85%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: min(0.5vw, 2px);  /* Dynamic letter spacing too */
+  text-shadow: 
+    0 0 10px rgba(52, 152, 219, 0.5),
+    0 0 20px rgba(52, 152, 219, 0.3),
+    0 0 30px rgba(52, 152, 219, 0.2);
+}
+
+/* Style the Material-UI components */
+.MuiTextField-root {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+  backdrop-filter: blur(5px) !important;
+  border-radius: 12px !important;
+  margin-right: 16px !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiTextField-root:hover {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+}
+
+.MuiInputBase-input {
+  color: white !important;
+}
+
+.MuiButton-contained {
+  background: linear-gradient(90deg, #3498db 0%, #2980b9 100%) !important;
+  border-radius: 12px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  padding: 12px 28px !important;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3) !important;
+}
+
+/* Remove the old media query since we're using dynamic sizing */
 @media (max-width: 950px) {
-  .app-title {
-    font-size: 2rem !important; 
-    margin-top: 50px;
+  .App {
+    padding: 10px;
   }
+}
+
+/* Add smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stock-card-enter {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Update StockCard styles */
+.stock-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add some depth to the trash zone */
+.trash-zone {
+  background: linear-gradient(145deg, rgba(255, 0, 0, 0.1) 0%, rgba(255, 0, 0, 0.05) 100%);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
