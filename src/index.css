@@ -117,43 +117,91 @@ body {
   border: none;
   box-shadow: none;
   backdrop-filter: none;
-  transition: transform 0.2s ease;  /* Add smooth transition */
+  transition: all 0.3s ease;  /* Changed from transform to all */
+  padding: 0;  /* Remove default padding */
+  margin: 4px 0;  /* Use smaller margins */
+  width: 100%;
+  max-width: 400px;
 }
 
 .stock-card:hover {
-  transform: scale(1.02);  /* Slightly increase size on hover */
+  transform: scale(1.02);
 }
 
-/* Update delete button to be hidden by default */
-.delete-button {
-  position: absolute;
-  right: -40px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: rgba(255, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #fff;
-  font-size: 18px;
-  border: 1px solid rgba(255, 0, 0, 0.3);
-  z-index: 10;
-  opacity: 0;
+/* Delete button styles for desktop */
+@media (min-width: 768px) {
+  .delete-button {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #fff;
+    font-size: 18px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    z-index: 10;
+    opacity: 0;
+  }
+
+  .stock-card:hover .delete-button,
+  .delete-button:hover {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .delete-button:hover {
+    background: rgba(255, 0, 0, 0.3);
+  }
 }
 
-/* Show delete button on stock card hover OR when hovering the button itself */
-.stock-card:hover .delete-button,
-.delete-button:hover {
-  opacity: 1;
-  pointer-events: auto;
-}
+/* Mobile styles */
+@media (max-width: 767px) {
+  .stock-card {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Smoother easing */
+    touch-action: pan-y pinch-zoom;
+    overflow: visible;
+    transform-origin: center center;  /* Smooth transform origin */
+  }
 
-/* Style for when hovering the button itself */
-.delete-button:hover {
-  background: rgba(255, 0, 0, 0.3);
+  .stock-card.show-delete {
+    transform: translateX(-40px);
+  }
+
+  .delete-button {
+    position: absolute;
+    right: -35px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Match card transition */
+    z-index: 100;
+  }
+
+  .stock-card.show-delete .delete-button {
+    opacity: 1;
+  }
+
+  /* Add tap feedback */
+  .stock-card:active {
+    background: rgba(255, 255, 255, 0.05);
+  }
 }

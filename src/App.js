@@ -206,7 +206,10 @@ function App() {
                   ref={provided.innerRef}
                   style={{
                     width: '100%',
-                    maxWidth: '400px'
+                    maxWidth: '400px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 0  // Remove any gap between items
                   }}
                 >
                   {stockTickers.map((ticker, index) => (
@@ -222,7 +225,9 @@ function App() {
                           {...provided.dragHandleProps}
                           style={{
                             ...provided.draggableProps.style,
-                            opacity: snapshot.isDragging ? 0.8 : 1
+                            opacity: snapshot.isDragging ? 0.8 : 1,
+                            margin: 0,  // Remove margin
+                            padding: 0  // Remove padding
                           }}
                         >
                           <StockCard

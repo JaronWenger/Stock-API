@@ -1,22 +1,40 @@
 // components/StockCard.js
-import React from 'react';
+import React, { useState } from 'react';
 
 // Create a StockCard component that accepts symbol, name, price, and percentChange as props
 const StockCard = ({ symbol, name, price, percentChange = 0, onCardClick, onDelete }) => {
   const isPositive = percentChange >= 0;
+  const isMobile = window.innerWidth < 768;
+  const [showDelete, setShowDelete] = useState(false);
+
+  const handleTap = (e) => {
+    if (isMobile) {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowDelete(!showDelete);
+    } else {
+      onCardClick && onCardClick(e);
+    }
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    onDelete(symbol);
+  };
   
   return (
-    <div className="stock-card" style={{ position: 'relative' }}>
+    <div 
+      className={`stock-card ${showDelete ? 'show-delete' : ''}`}
+      style={{ position: 'relative' }}
+      onClick={handleTap}
+    >
       <div 
         className="delete-button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete(symbol);
-        }}
+        onClick={handleDelete}
       >
         ×
       </div>
-      <div style={cardStyle} onClick={onCardClick}>
+      <div style={cardStyle}>
         <div style={leftContentStyle}>
           <h3 style={symbolStyle}>{symbol}</h3>
           <p style={nameStyle}>{name}</p>
@@ -50,7 +68,7 @@ const cardStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  margin: '8px 0',
+  margin: 0,
   cursor: 'grab',
   transition: 'all 0.2s ease',
   boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
