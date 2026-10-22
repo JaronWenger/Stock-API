@@ -63,6 +63,7 @@ function App() {
         }
       );
 
+      //RESPONSE DATA
       const snapshot = response.data;
       const currentPrice = snapshot.latestTrade.p;
       const dailyBar = snapshot.dailyBar;

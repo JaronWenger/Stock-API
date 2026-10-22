@@ -4,6 +4,9 @@ html, body {
   padding: 0;
   min-height: 100vh;
   background: #1a1a1a;  /* Solid color for base */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  position: relative; /* Create new stacking context */
+  width: 100%;
 }
 
 body {
@@ -39,6 +42,9 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width calculation */
+  overflow-x: hidden;
 }
 
 .app-title {
@@ -164,7 +170,13 @@ body {
 
 /* Mobile styles */
 @media (max-width: 767px) {
+  .App {
+    padding: 10px;
+  }
+
   .stock-card {
+    width: 100%;
+    box-sizing: border-box;
     position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  /* Smoother easing */
     touch-action: pan-y pinch-zoom;
